@@ -1,0 +1,40 @@
+import random
+
+def generate_private_key(prime):
+    """Generate a private key that is a random integer less than the prime."""
+    return random.randint(1, prime-1)
+
+def generate_public_key(prime, base, private_key):
+    """Generate a public key using the formula (base ^ private_key) % prime."""
+    return pow(base, private_key, prime)
+
+def generate_shared_secret(prime, public_key, private_key):
+    """Generate the shared secret using the formula (public_key ^ private_key) % prime."""
+    return pow(public_key, private_key, prime)
+
+# Example usage
+prime = 23    # A large prime number
+base = 5      # A primitive root modulo of prime
+
+# User A
+private_key_a = generate_private_key(prime)
+public_key_a = generate_public_key(prime, base, private_key_a)
+
+# User B
+private_key_b = generate_private_key(prime)
+public_key_b = generate_public_key(prime, base, private_key_b)
+
+# Exchange public keys and generate shared secret
+shared_secret_a = generate_shared_secret(prime, public_key_b, private_key_a)
+shared_secret_b = generate_shared_secret(prime, public_key_a, private_key_b)
+
+print(f"User A's private key: {private_key_a}")
+print(f"User A's public key: {public_key_a}")
+print(f"User B's private key: {private_key_b}")
+print(f"User B's public key: {public_key_b}")
+print(f"Shared secret calculated by User A: {shared_secret_a}")
+print(f"Shared secret calculated by User B: {shared_secret_b}")
+
+# Verify if both shared secrets are equal
+assert shared_secret_a == shared_secret_b, "Shared secrets do not match!"
+print("Shared secret successfully exchanged!")
